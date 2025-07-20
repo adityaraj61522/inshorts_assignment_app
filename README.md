@@ -58,7 +58,12 @@ A modern Flutter application that showcases movies using TMDB API with a Netflix
 
 ## 📱 Screenshots
 
-[Add your screenshots here]
+<img width="988" height="1852" alt="image" src="https://github.com/user-attachments/assets/161047d1-c792-4f0f-b37b-6b31f045fb66" />
+
+<img width="1004" height="1822" alt="image" src="https://github.com/user-attachments/assets/75874147-3d2b-440c-9246-2cb5b75c431b" />
+
+<img width="1006" height="1788" alt="image" src="https://github.com/user-attachments/assets/2f564fc5-d37c-4e77-a935-1308ab18523b" />
+
 
 ## 🚀 Getting Started
 
