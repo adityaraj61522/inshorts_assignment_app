@@ -1,3 +1,102 @@
-# inshorts_assignment_app
+# Flutter Movies App (TMDB)
 
-A new Flutter project.
+A modern Flutter application that showcases movies using TMDB API with a Netflix-inspired UI, offline support, and seamless user experience.
+
+## 🎬 Features
+
+- **Home Screen**
+  - Trending Movies Carousel
+  - Now Playing Movies Section
+  - Netflix-style UI with horizontal scrolling lists
+  - Smooth animations and transitions
+
+- **Search Experience**
+  - Real-time search with debouncing(500ms)
+  - Search results update as you type
+  - Beautiful movie cards with posters and details
+  - Loading states and error handling
+
+- **Movie Details**
+  - Comprehensive movie information
+  - High-resolution backdrop images
+  - Rating and release information
+  - Sharing functionality with deep linking support
+
+- **Offline Support**
+  - Local data persistence using Hive
+  - Works without internet connection
+  - Automatic sync when online
+
+- **Bookmarking**
+  - Save favorite movies
+  - Dedicated bookmarks page
+  - Persistent across app restarts
+
+## 🛠 Technical Implementation
+
+### Architecture
+- GetX for state management and navigation
+- Clean Architecture principles
+- Repository pattern for data handling
+
+### API Integration
+- TMDB API v3
+- Retrofit for API calls
+- Dio for HTTP client
+- JSON serialization
+
+### Local Storage
+- Hive for offline data storage
+- Efficient data caching
+- Type adapters for movie models
+
+### UI/UX
+- Material Design components
+- Custom animations
+- Responsive layout
+- Dark theme
+
+## 📱 Screenshots
+
+[Add your screenshots here]
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Flutter SDK
+- TMDB API Key
+- Android Studio / VS Code
+
+### Installation
+
+1. Clone the repository
+```bash
+git clone https://github.com/adityaraj61522/inshorts_assignment_app.git
+```
+
+2. Get dependencies
+```bash
+flutter pub get
+```
+
+3. Add your TMDB API key in `lib/common/api_service/dio_client.dart`
+
+4. Run the app
+```bash
+flutter run
+```
+
+### Building
+
+#### Android
+```bash
+flutter build apk --release
+```
+
+#### iOS
+```bash
+flutter build ios --release
+```
+
+
+---
