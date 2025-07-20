@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:inshorts_assignment_app/common/color_pallet/color_pallet.dart';
 import 'package:inshorts_assignment_app/common/enums/api_status_enums.dart';
 import 'package:inshorts_assignment_app/pages/movie_detail_page/detail_page_controller.dart';
 
@@ -44,22 +43,6 @@ class MovieDetailScreen extends StatelessWidget {
           ),
         ),
         SizedBox(height: 20),
-        ElevatedButton(
-          onPressed: () => {},
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.red,
-            minimumSize: Size(double.infinity, 50),
-          ),
-          child: Text(
-            "Add Movie to Watchlist",
-            style: TextStyle(
-              color: AppColors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
-          ),
-        ),
-        SizedBox(height: 8),
       ],
     );
   }

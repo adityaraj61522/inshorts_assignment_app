@@ -26,4 +26,12 @@ abstract class ApiService {
     @Path("movie_id") int movieId, {
     @Query("language") String language = "en-US",
   });
+
+  @GET("search/movie")
+  Future<NowPlayingMoviesResponse> searchMovies({
+    @Query("query") required String query,
+    @Query("language") String language = "en-US",
+    @Query("page") int page = 1,
+    @Query("include_adult") bool includeAdult = false,
+  });
 }

@@ -44,7 +44,6 @@ class MovieDetailController extends GetxController {
       }
     } catch (e) {
       movieDetailsApiStatus.value = ApiStatus.error;
-      print("Error fetching movies: $e");
     }
   }
 }

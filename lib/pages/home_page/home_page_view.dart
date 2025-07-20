@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:inshorts_assignment_app/common/color_pallet/color_pallet.dart';
 import 'package:inshorts_assignment_app/common/enums/api_status_enums.dart';
 import 'package:inshorts_assignment_app/common/response_models/now_playing_movies_response/now_playing_movies_response.dart';
 import 'package:inshorts_assignment_app/common/routing/app_routes.dart';
@@ -13,7 +14,11 @@ class HomePageScreen extends StatelessWidget {
     tag: DateTime.now().millisecondsSinceEpoch.toString(),
   );
 
-  Widget _buildCarousel({required String title, required List<Movie> movies}) {
+  Widget _buildCarousel({
+    required String title,
+    required List<Movie> movies,
+    bool showAddButton = true,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -29,7 +34,7 @@ class HomePageScreen extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: 140,
+          height: 250,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -47,13 +52,13 @@ class HomePageScreen extends StatelessWidget {
                     );
                   },
                   child: SizedBox(
-                    height: 250,
+                    height: 400,
                     width: 100,
                     child: Column(
                       children: [
                         SizedBox(
-                          height: 120,
-                          width: 90,
+                          height: 150,
+                          width: 120,
                           child: Image.network(
                             "https://image.tmdb.org/t/p/original${movies[index].posterPath ?? ''}",
                             fit: BoxFit.cover,
@@ -69,6 +74,25 @@ class HomePageScreen extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
+                        if (showAddButton) ...{
+                          ElevatedButton(
+                            onPressed: () => controller.onBookmarkedClicked(
+                              movie: movies[index],
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.red,
+                              minimumSize: Size(double.infinity, 30),
+                            ),
+                            child: Text(
+                              "Add",
+                              style: TextStyle(
+                                color: AppColors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+                        },
                       ],
                     ),
                   ),
@@ -85,6 +109,7 @@ class HomePageScreen extends StatelessWidget {
     required String title,
     required List<Movie> movies,
     required Rx<ApiStatus> apiStatus,
+    bool showAddButton = true,
   }) {
     return Obx(() {
       if (apiStatus.value == ApiStatus.loading) {
@@ -96,8 +121,12 @@ class HomePageScreen extends StatelessWidget {
             style: TextStyle(color: Colors.grey, fontSize: 16),
           ),
         );
-      } else if (apiStatus == ApiStatus.success) {
-        return _buildCarousel(title: title, movies: movies);
+      } else if (apiStatus.value == ApiStatus.success) {
+        return _buildCarousel(
+          title: title,
+          movies: movies,
+          showAddButton: showAddButton,
+        );
       } else {
         return SizedBox.shrink();
       }
@@ -122,7 +151,7 @@ class HomePageScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'NETFLIX',
+                      'TMDB',
                       style: TextStyle(
                         color: Colors.red,
                         fontSize: 32,
@@ -130,53 +159,73 @@ class HomePageScreen extends StatelessWidget {
                         letterSpacing: 2,
                       ),
                     ),
-                    Icon(Icons.search, color: Colors.white, size: 28),
+                    InkWell(
+                      onTap: () {
+                        Get.toNamed(AppRoutes.searchPage);
+                      },
+                      child: Icon(Icons.search, color: Colors.white, size: 28),
+                    ),
                   ],
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                  vertical: 8.0,
-                ),
-                height: 180,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  image: DecorationImage(
-                    image: NetworkImage(
-                      'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80',
-                    ),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.black.withOpacity(0.7),
-                        Colors.transparent,
-                      ],
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                    ),
-                  ),
-                  child: Align(
-                    alignment: Alignment.bottomLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Text(
-                        'Featured Movie',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
+              Obx(() {
+                if (controller.nowPlayingMoviesApiStatus.value ==
+                    ApiStatus.success) {
+                  // Display the featured movie if available
+                  return InkWell(
+                    onTap: () {
+                      final selectedMovieId =
+                          controller.nowPlayingMovies.first.id;
+                      Get.toNamed(
+                        AppRoutes.movieDetailPage,
+                        parameters: {'movieId': selectedMovieId.toString()},
+                      );
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 16.0,
+                        vertical: 8.0,
+                      ),
+                      height: 180,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        image: DecorationImage(
+                          image: NetworkImage(
+                            "https://image.tmdb.org/t/p/original${controller.nowPlayingMovies.first.posterPath!}",
+                          ),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          gradient: LinearGradient(
+                            colors: [Colors.black, Colors.transparent],
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                          ),
+                        ),
+                        child: Align(
+                          alignment: Alignment.bottomLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Text(
+                              'Featured Movie',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-              ),
+                  );
+                }
+                return SizedBox.shrink();
+              }),
+
               buildMovieSection(
                 apiStatus: controller.nowPlayingMoviesApiStatus,
                 title: 'Now Playing',
@@ -187,9 +236,11 @@ class HomePageScreen extends StatelessWidget {
                 title: 'Trending Now',
                 movies: controller.trendingPlayingMovies,
               ),
-              _buildCarousel(
+              buildMovieSection(
+                apiStatus: controller.bookMarkedMoviesApiStatus,
                 title: 'Bookmarks',
                 movies: controller.bookMarkedMovies,
+                showAddButton: false, // No add button for bookmarks
               ),
             ],
           ),

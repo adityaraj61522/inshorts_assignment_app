@@ -20,36 +20,6 @@ class _ApiService implements ApiService {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<MovieDetails> getMovieDetails(
-    int movieId, {
-    String language = "en-US",
-  }) async {
-    final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'language': language};
-    final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<MovieDetails>(
-      Options(method: 'GET', headers: _headers, extra: _extra)
-          .compose(
-            _dio.options,
-            'movie/${movieId}',
-            queryParameters: queryParameters,
-            data: _data,
-          )
-          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
-    );
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late MovieDetails _value;
-    try {
-      _value = MovieDetails.fromJson(_result.data!);
-    } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
-      rethrow;
-    }
-    return _value;
-  }
-
-  @override
   Future<NowPlayingMoviesResponse> getNowPlayingMovies({
     String language = "en-US",
     int page = 1,
@@ -99,6 +69,73 @@ class _ApiService implements ApiService {
           .compose(
             _dio.options,
             'movie/popular',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late NowPlayingMoviesResponse _value;
+    try {
+      _value = NowPlayingMoviesResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<MovieDetails> getMovieDetails(
+    int movieId, {
+    String language = "en-US",
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'language': language};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<MovieDetails>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            'movie/${movieId}',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late MovieDetails _value;
+    try {
+      _value = MovieDetails.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<NowPlayingMoviesResponse> searchMovies({
+    required String query,
+    String language = "en-US",
+    int page = 1,
+    bool includeAdult = false,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'query': query,
+      r'language': language,
+      r'page': page,
+      r'include_adult': includeAdult,
+    };
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<NowPlayingMoviesResponse>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            'search/movie',
             queryParameters: queryParameters,
             data: _data,
           )
