@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,7 +8,6 @@ import 'package:inshorts_assignment_app/common/response_models/now_playing_movie
 import 'package:inshorts_assignment_app/common/routing/app_routes.dart';
 import 'package:inshorts_assignment_app/pages/home_page/home_page_controller.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:uni_links/uni_links.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,19 +39,13 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  void _initDeepLinkListener() async {
-    // Handle app launched via deep link
-    final initialLink = await getInitialLink();
-    if (initialLink != null) {
+  void _initDeepLinkListener() {
+    final initialLink =
+        WidgetsBinding.instance.platformDispatcher.defaultRouteName;
+
+    if (initialLink != null && initialLink != "/") {
       _handleDeepLink(initialLink);
     }
-
-    // Handle deep link while app is running
-    _sub = uriLinkStream.listen((Uri? uri) {
-      if (uri != null) {
-        _handleDeepLink(uri.toString());
-      }
-    });
   }
 
   void _handleDeepLink(String link) {
